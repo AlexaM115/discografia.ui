@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { artistService, artistTypeService } from '../services';
+import { artistTypeService } from '../services';
+import { artistService } from '../services';
 import { useAuth } from '../context/AuthContext';
 import Layout from './Layout';
 import ArtistForm from './ArtistForm';
@@ -116,18 +117,6 @@ const ArtistList = () => {
         return artist.artist_type_description || 'Tipo no encontrado';
     };
 
-    const formatCurrency = (amount) => {
-        return new Intl.NumberFormat('es-HN', {
-            style: 'currency',
-            currency: 'HNL'
-        }).format(amount);
-    };
-
-    const calculateFinalPrice = (cost, discount) => {
-        const discountAmount = (cost * discount) / 100;
-        return cost - discountAmount;
-    };
-
     if (loading) {
         return (
             <div className="flex justify-center items-center min-h-screen">
@@ -194,14 +183,14 @@ const ArtistList = () => {
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {catalogs.length === 0 ? (
+                        {artists.length === 0 ? (
                             <tr>
                                 <td colSpan="7" className="px-6 py-4 text-center text-gray-500">
                                     No hay catálogos registrados
                                 </td>
                             </tr>
                         ) : (
-                            catalogs.map((item) => (
+                            artists.map((item) => (
                                 <tr 
                                     key={item.id} 
                                     className={`hover:bg-gray-50 transition-colors ${
@@ -221,25 +210,6 @@ const ArtistList = () => {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                         {formatCurrency(item.cost)}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {item.discount > 0 ? (
-                                            <span className="inline-flex px-2 py-1 text-xs font-medium bg-orange-100 text-orange-800 rounded-full">
-                                                {item.discount}%
-                                            </span>
-                                        ) : (
-                                            <span className="text-gray-400">Sin descuento</span>
-                                        )}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                        {item.discount > 0 ? (
-                                            <div className="flex flex-col">
-                                                <span className="text-green-600">{formatCurrency(calculateFinalPrice(item.cost, item.discount))}</span>
-                                                <span className="text-xs text-gray-400 line-through">{formatCurrency(item.cost)}</span>
-                                            </div>
-                                        ) : (
-                                            formatCurrency(item.cost)
-                                        )}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${

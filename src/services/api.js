@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://dulceria-api-production.up.railway.app';
+const API_BASE_URL = 'https://discografia-api-production.up.railway.app';
 //const API_BASE_URL = 'http://localhost:8000';
 
 

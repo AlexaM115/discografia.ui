@@ -1,82 +1,82 @@
 import { API_BASE_URL, handleResponse } from "./api.js";
 
-export const artistTypeService = {
+export const artistService = {
     getAll: async () => {
         try {
-            const token = localStorage.getItem('authToken');
-            const response = await fetch(`${API_BASE_URL}/cartisttypes`, {
+            const response = await fetch(`${API_BASE_URL}/artists`, {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    'Content-Type': 'application/json'
                 }
             });
 
             return await handleResponse(response);
         } catch (error) {
-            console.error('Error al obtener tipos de artista:', error);
+            console.error('Error al obtener artistas:', error);
             throw error;
         }
     },
 
     getById: async (id) => {
         try {
-            const token = localStorage.getItem('authToken');
-            const response = await fetch(`${API_BASE_URL}/artisttypes/${id}`, {
+            const response = await fetch(`${API_BASE_URL}/artists/${id}`, {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    'Content-Type': 'application/json'
                 }
             });
 
             return await handleResponse(response);
         } catch (error) {
-            console.error('Error al obtener tipo de artista:', error);
+            console.error('Error al obtener artista:', error);
             throw error;
         }
     },
 
-    create: async (artistType) => {
+    create: async (artist) => {
         try {
             const token = localStorage.getItem('authToken');
-            const response = await fetch(`${API_BASE_URL}/artisttypes`, {
+            const response = await fetch(`${API_BASE_URL}/artists`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
-                    description: artistType.description,
-                    active: artistType.active ?? true
+                    id_artist_type: artist.id_artist_type,
+                    name: artist.name,
+                    description: artist.description,
+                    active: artist.active ?? true
                 })
             });
 
             return await handleResponse(response);
         } catch (error) {
-            console.error('Error al crear tipo de artista:', error);
+            console.error('Error al crear artista:', error);
             throw error;
         }
     },
 
-    update: async (id, artistType) => {
+    update: async (id, artist) => {
         try {
             const token = localStorage.getItem('authToken');
-            const response = await fetch(`${API_BASE_URL}/artisttypes/${id}`, {
+            const response = await fetch(`${API_BASE_URL}/artists/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
-                    description: artistType.description,
-                    active: artistType.active
+                    id_artist_type: artist.id_artist_type,
+                    name: artist.name,
+                    description: artist.description,
+                    active: artist.active ?? true
                 })
             });
 
             return await handleResponse(response);
         } catch (error) {
-            console.error('Error al actualizar tipo de artista:', error);
+            console.error('Error al actualizar artista:', error);
             throw error;
         }
     },
@@ -84,7 +84,7 @@ export const artistTypeService = {
     deactivate: async (id) => {
         try {
             const token = localStorage.getItem('authToken');
-            const response = await fetch(`${API_BASE_URL}/artisttypes/${id}`, {
+            const response = await fetch(`${API_BASE_URL}/artists/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ export const artistTypeService = {
 
             return await handleResponse(response);
         } catch (error) {
-            console.error('Error al desactivar tipo de artista:', error);
+            console.error('Error al desactivar artista:', error);
             throw error;
         }
     }
