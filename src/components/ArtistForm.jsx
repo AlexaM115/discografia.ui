@@ -111,19 +111,19 @@ const ArtistForm = ({ item, artistTypes, onSuccess, onCancel }) => {
 
                     <div className="space-y-4">
                         <div>
-                            <label htmlFor="id_catalog_type" className="block text-sm font-medium text-gray-700 mb-1">
+                            <label htmlFor="id_artist_type" className="block text-sm font-medium text-gray-700 mb-1">
                                 Tipo de Artista *
                             </label>
                             <select
-                                id="id_catalog_type"
-                                name="id_catalog_type"
-                                value={formData.id_catalog_type}
+                                id="id_artist_type"
+                                name="id_artist_type"
+                                value={formData.id_artist_type}
                                 onChange={handleChange}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
                                 required
                             >
                                 <option value="">Seleccionar tipo...</option>
-                                {activeCatalogTypes.map((type) => (
+                                {activeArtistTypes.map((type) => (
                                     <option key={type.id} value={type.id}>
                                         {type.description}
                                     </option>
