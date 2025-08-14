@@ -118,10 +118,11 @@ const ArtistForm = ({ item, artistTypes, onSuccess, onCancel }) => {
                             >
                                 <option value="">Seleccionar tipo...</option>
                                 {activeArtistTypes.map((type) => (
-                                    <option key={type.id} value={type.id}>
+                                    <option key={type._id || type.id} value={type._id || type.id}>
                                         {type.description}
                                     </option>
                                 ))}
+
                             </select>
                         </div>
 
