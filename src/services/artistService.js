@@ -48,7 +48,6 @@ export const artistService = {
                     lastname: artist.lastname,        
                     gender: artist.gender,            
                     date_birth: artist.date_birth,    
-                    description: artist.description,
                     active: artist.active ?? true
                 })
             });
