@@ -68,7 +68,7 @@ function App() {
             />
 
             <Route
-              path='/artists'
+              path='/artist'
               element={
                 <ProtectedRoute>
                   <ArtistsList />
