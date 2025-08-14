@@ -6,7 +6,7 @@ import Layout from './Layout';
 import ArtistForm from './ArtistForm';
 
 const ArtistList = () => {
-    const [artist, setArtists] = useState([]);
+    const [artists, setArtists] = useState([]);
     const [artistTypes, setArtistTypes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -175,7 +175,7 @@ const ArtistList = () => {
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {!artist || artist.length === 0 ? (
+                        {!artists || artists.length === 0 ? (
                             <tr>
                                 <td colSpan="7" className="px-6 py-4 text-center text-gray-500">
                                     No hay artistas registrados
