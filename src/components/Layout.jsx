@@ -54,7 +54,7 @@ const Layout = ({ children }) => {
                             <li>
                                 <button 
                                     className="flex items-center px-4 py-2 text-gray-700 hover:text-green-600 hover:bg-green-50 rounded-md transition-colors font-medium"
-                                    onClick={() => navigate('/catalog-types')}
+                                    onClick={() => navigate('/artist-types')}
                                 >
                                     <span className="mr-2">🏷️</span>
                                     Tipos
@@ -63,7 +63,7 @@ const Layout = ({ children }) => {
                             <li>
                                 <button 
                                     className="flex items-center px-4 py-2 text-gray-700 hover:text-green-600 hover:bg-green-50 rounded-md transition-colors font-medium"
-                                    onClick={() => navigate('/catalogs')}
+                                    onClick={() => navigate('/artists')}
                                 >
                                     <span className="mr-2">📋</span>
                                     Catálogos
