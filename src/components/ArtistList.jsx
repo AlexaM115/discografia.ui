@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { artistService } from '../services';
+import artistService from '../services';
 import { useAuth } from '../context/AuthContext';
 import Layout from './Layout';
 import ArtistForm from './ArtistForm';
