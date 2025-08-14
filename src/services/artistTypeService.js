@@ -4,7 +4,7 @@ export const artistTypeService = {
     getAll: async () => {
         try {
             const token = localStorage.getItem('authToken');
-            const response = await fetch(`${API_BASE_URL}/cartisttypes`, {
+            const response = await fetch(`${API_BASE_URL}/artist_type`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -22,7 +22,7 @@ export const artistTypeService = {
     getById: async (id) => {
         try {
             const token = localStorage.getItem('authToken');
-            const response = await fetch(`${API_BASE_URL}/artisttypes/${id}`, {
+            const response = await fetch(`${API_BASE_URL}/artist_type/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ export const artistTypeService = {
     create: async (artistType) => {
         try {
             const token = localStorage.getItem('authToken');
-            const response = await fetch(`${API_BASE_URL}/artisttypes`, {
+            const response = await fetch(`${API_BASE_URL}/artist_type`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ export const artistTypeService = {
     update: async (id, artistType) => {
         try {
             const token = localStorage.getItem('authToken');
-            const response = await fetch(`${API_BASE_URL}/artisttypes/${id}`, {
+            const response = await fetch(`${API_BASE_URL}/artist_type/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ export const artistTypeService = {
     deactivate: async (id) => {
         try {
             const token = localStorage.getItem('authToken');
-            const response = await fetch(`${API_BASE_URL}/artisttypes/${id}`, {
+            const response = await fetch(`${API_BASE_URL}/artist_type/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
