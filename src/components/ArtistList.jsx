@@ -175,7 +175,7 @@ const ArtistList = () => {
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {artist.length === 0 ? (
+                        {!artist || artist.length === 0 ? (
                             <tr>
                                 <td colSpan="7" className="px-6 py-4 text-center text-gray-500">
                                     No hay catálogos registrados
@@ -199,9 +199,6 @@ const ArtistList = () => {
                                         <span className="inline-flex px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
                                             {getArtistTypeName(item)}
                                         </span>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        {formatCurrency(item.cost)}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
