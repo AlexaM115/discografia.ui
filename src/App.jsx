@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import './App.css'
 
 import {
@@ -16,8 +15,8 @@ import PublicRoute from './components/PublicRoute'
 import Dashboard from './components/Dashboard'
 import LoginScreen from './components/LoginScreen'
 import SignupScreen from './components/SignupScreen'
-/*import CatalogTypesList from './components/CatalogTypesList'
-import CatalogsList from './components/CatalogsList'*/
+import ArtistTypesList from './components/ArtistTypeList'
+import ArtistsList from './components/ArtistList'
 
 
 
@@ -60,19 +59,19 @@ function App() {
             />
 
             <Route
-              path='/catalog-types'
+              path='/artist-types'
               element={
                 <ProtectedRoute>
-                  <CatalogTypesList />
+                  <ArtistTypesList />
                 </ProtectedRoute>
               }
             />
 
             <Route
-              path='/catalogs'
+              path='/artists'
               element={
                 <ProtectedRoute>
-                  <CatalogsList />
+                  <ArtistsList />
                 </ProtectedRoute>
               }
             />
