@@ -57,16 +57,16 @@ const Layout = ({ children }) => {
                                     onClick={() => navigate('/artist-types')}
                                 >
                                     <span className="mr-2">🏷️</span>
-                                    Tipos
+                                    Tipos de Artista
                                 </button>
                             </li>
                             <li>
                                 <button 
                                     className="flex items-center px-4 py-2 text-gray-700 hover:text-green-600 hover:bg-green-50 rounded-md transition-colors font-medium"
-                                    onClick={() => navigate('/artists')}
+                                    onClick={() => navigate('/artist')}
                                 >
                                     <span className="mr-2">📋</span>
-                                    Catálogos
+                                    Artistas
                                 </button>
                             </li>
                         </ul>
