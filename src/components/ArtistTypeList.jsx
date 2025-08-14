@@ -178,16 +178,15 @@ const ArtistTypesList = () => {
                                 </td>
                             </tr>
                         ) : (
-                            artistTypes.map((item, index) => (
-    <tr 
-        key={item.id || index}
-        className={`hover:bg-gray-50 transition-colors ${
-            recentlyUpdated === item.id 
-                ? 'bg-green-50 border-l-4 border-green-400' 
-                : ''
-        }`}
-    >
-
+                            artistTypes.map((item) => (
+                                <tr 
+                                    key={item.id} 
+                                    className={`hover:bg-gray-50 transition-colors ${
+                                        recentlyUpdated === item.id 
+                                            ? 'bg-green-50 border-l-4 border-green-400' 
+                                            : ''
+                                    }`}
+                                >
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                         {item.id}
                                     </td>
