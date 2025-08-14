@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { catalogService } from '../services';
+import { artistService } from '../services';
 
-const CatalogForm = ({ item, artistTypes, onSuccess, onCancel }) => {
+const ArtistForm = ({ item, artistTypes, onSuccess, onCancel }) => {
     const [formData, setFormData] = useState({
         id_artist_type: item?.id_artis_type || '',
         name: item?.name || '',
@@ -90,7 +90,7 @@ const CatalogForm = ({ item, artistTypes, onSuccess, onCancel }) => {
         }
     };
 
-    const activeartistTypes = artistTypes.filter(type => type.active);
+    const activeArtistTypes = artistTypes.filter(type => type.active);
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">

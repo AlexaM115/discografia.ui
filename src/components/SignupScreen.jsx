@@ -13,6 +13,7 @@ const SignupScreen = () => {
     });
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     
     const { register } = useAuth(); // Removemos loading del contexto para el signup también
@@ -79,7 +80,8 @@ const SignupScreen = () => {
         try {
             const result = await register(formData.name, formData.lastname, formData.email, formData.password);
             if (result) {
-                setSuccess('¡Cuenta creada exitosamente! Redirigiendo al login...');
+                setSuccess('¡Cuenta creada exitosamente!');
+                setShowSuccessModal(true);
 
                 // Limpiar formulario
                 setFormData({
@@ -90,8 +92,7 @@ const SignupScreen = () => {
                     confirmPassword: ''
                 });
 
-
-                navigate('/login', { replace: true });
+                // Redirección será controlada por el usuario al aceptar en el modal
             }
         } catch (error) {
             console.error('Error en registro:', error);
@@ -148,7 +149,14 @@ const SignupScreen = () => {
                 )}
 
                 {/* Formulario */}
-                <form className="space-y-4" noValidate>
+                <form
+                    className="space-y-4"
+                    noValidate
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        handleSignup();
+                    }}
+                >
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
@@ -259,17 +267,11 @@ const SignupScreen = () => {
                             required
                             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
                             placeholder="Confirma tu contraseña"
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter') {
-                                    handleSignup();
-                                }
-                            }}
                         />
                     </div>
 
                     <button
-                        type="button"
-                        onClick={handleSignup}
+                        type="submit"
                         disabled={isSubmitting}
                         className="w-full bg-pink-500 text-white py-2 px-4 rounded-md hover:bg-pink-600 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                     >
@@ -285,6 +287,29 @@ const SignupScreen = () => {
                     </Link>
                 </p>
             </div>
+        {showSuccessModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-black bg-opacity-40" />
+                    <div className="relative bg-white rounded-lg shadow-lg w-11/12 max-w-md p-6">
+                        <div className="flex items-center mb-3">
+                            <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center mr-3">
+                                <span className="text-white">✓</span>
+                            </div>
+                            <h3 className="text-lg font-semibold text-gray-800">Cuenta creada</h3>
+                        </div>
+            <p className="text-gray-600 mb-4">{success} Presiona "Aceptar" para ir al login.</p>
+                        <div className="flex justify-end gap-2">
+                            <button
+                                type="button"
+                                onClick={() => navigate('/login', { replace: true })}
+                                className="px-4 py-2 rounded-md bg-pink-500 text-white hover:bg-pink-600"
+                            >
+                Aceptar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
