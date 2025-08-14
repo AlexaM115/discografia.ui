@@ -6,7 +6,7 @@ import Layout from './Layout';
 import ArtistForm from './ArtistForm';
 
 const ArtistList = () => {
-    const [artists, setArtists] = useState([]);
+    const [artist, setArtists] = useState([]);
     const [artistTypes, setArtistTypes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -163,34 +163,26 @@ const ArtistList = () => {
                                 Nombre
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Tipo
+                                Apellido
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Costo
+                                Género
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Descuento
+                                Fecha de nacimiento
                             </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Precio Final
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Estado
-                            </th>
-                            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Acciones
-                            </th>
+                            
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {artists.length === 0 ? (
+                        {artist.length === 0 ? (
                             <tr>
                                 <td colSpan="7" className="px-6 py-4 text-center text-gray-500">
                                     No hay catálogos registrados
                                 </td>
                             </tr>
                         ) : (
-                            artists.map((item) => (
+                            artist.map((item) => (
                                 <tr 
                                     key={item.id} 
                                     className={`hover:bg-gray-50 transition-colors ${
