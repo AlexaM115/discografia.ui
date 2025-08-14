@@ -45,6 +45,9 @@ export const artistService = {
                 body: JSON.stringify({
                     id_artist_type: artist.id_artist_type,
                     name: artist.name,
+                    lastname: artist.lastname,        
+                    gender: artist.gender,            
+                    date_birth: artist.date_birth,    
                     description: artist.description,
                     active: artist.active ?? true
                 })
