@@ -3,7 +3,7 @@ import { API_BASE_URL, handleResponse } from "./api.js";
 export const artistService = {
     getAll: async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/artist`, {
+            const response = await fetch(`${API_BASE_URL}/artists`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -19,7 +19,7 @@ export const artistService = {
 
     getById: async (id) => {
         try {
-            const response = await fetch(`${API_BASE_URL}/artist/${id}`, {
+            const response = await fetch(`${API_BASE_URL}/artists/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -36,7 +36,7 @@ export const artistService = {
     create: async (artist) => {
         try {
             const token = localStorage.getItem('authToken');
-            const response = await fetch(`${API_BASE_URL}/artist`, {
+            const response = await fetch(`${API_BASE_URL}/artists`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ export const artistService = {
     update: async (id, artist) => {
         try {
             const token = localStorage.getItem('authToken');
-            const response = await fetch(`${API_BASE_URL}/artist/${id}`, {
+            const response = await fetch(`${API_BASE_URL}/artists/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -71,7 +71,6 @@ export const artistService = {
                 body: JSON.stringify({
                     id_artist_type: artist.id_artist_type,
                     name: artist.name,
-                    description: artist.description,
                     active: artist.active ?? true
                 })
             });
@@ -86,7 +85,7 @@ export const artistService = {
     deactivate: async (id) => {
         try {
             const token = localStorage.getItem('authToken');
-            const response = await fetch(`${API_BASE_URL}/artist/${id}`, {
+            const response = await fetch(`${API_BASE_URL}/artists/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
