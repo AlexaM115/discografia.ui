@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { artistTypeService } from '../services';
 import { artistService } from '../services';
 import { useAuth } from '../context/AuthContext';
 import Layout from './Layout';
