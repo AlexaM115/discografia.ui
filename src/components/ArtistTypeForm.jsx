@@ -106,7 +106,7 @@ const ArtistTypeForm = ({ item, onSuccess, onCancel }) => {
                                 onChange={handleChange}
                                 onKeyDown={handleKeyPress}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
-                                placeholder="Ej: Product, Bundle"
+                                placeholder="Ej: Cantante, Grupo Musical, etc."
                                 maxLength="100"
                                 autoFocus
                             />
