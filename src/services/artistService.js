@@ -3,7 +3,7 @@ import { API_BASE_URL, handleResponse } from "./api.js";
 export const artistService = {
     getAll: async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/artists`, {
+            const response = await fetch(`${API_BASE_URL}/artist`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -19,7 +19,7 @@ export const artistService = {
 
     getById: async (id) => {
         try {
-            const response = await fetch(`${API_BASE_URL}/artists/${id}`, {
+            const response = await fetch(`${API_BASE_URL}/artist/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -36,7 +36,7 @@ export const artistService = {
     create: async (artist) => {
         try {
             const token = localStorage.getItem('authToken');
-            const response = await fetch(`${API_BASE_URL}/artists`, {
+            const response = await fetch(`${API_BASE_URL}/artist`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ export const artistService = {
     update: async (id, artist) => {
         try {
             const token = localStorage.getItem('authToken');
-            const response = await fetch(`${API_BASE_URL}/artists/${id}`, {
+            const response = await fetch(`${API_BASE_URL}/artist/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ export const artistService = {
     deactivate: async (id) => {
         try {
             const token = localStorage.getItem('authToken');
-            const response = await fetch(`${API_BASE_URL}/artists/${id}`, {
+            const response = await fetch(`${API_BASE_URL}/artist/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
