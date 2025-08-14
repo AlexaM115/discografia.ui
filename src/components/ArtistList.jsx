@@ -44,7 +44,7 @@ const ArtistList = () => {
             setError('');
 
             const artistsData = await artistService.getAll();
-            setArtists(artistsData["artist"]);
+            setArtists(artistsData["artists"]);
 
             try {
                 const artistTypesData = await artistTypeService.getAll();
