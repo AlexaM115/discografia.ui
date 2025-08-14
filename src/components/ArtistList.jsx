@@ -120,7 +120,7 @@ const ArtistList = () => {
     if (loading) {
         return (
             <div className="flex justify-center items-center min-h-screen">
-                <div className="text-lg text-gray-600">Cargando catálogos...</div>
+                <div className="text-lg text-gray-600">Cargando artistas...</div>
             </div>
         );
     }
@@ -128,12 +128,12 @@ const ArtistList = () => {
     return (
         <Layout>
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold text-gray-800">Catálogos</h1>
+                <h1 className="text-3xl font-bold text-gray-800">Artistas</h1>
                 <button
                     onClick={handleCreate}
                     className="bg-pink-500 hover:bg-pink-600 text-white font-medium py-2 px-4 rounded-md transition-colors"
                 >
-                    + Nuevo Catálogo
+                    + Nuevo Artista
                 </button>
             </div>
 
@@ -178,7 +178,7 @@ const ArtistList = () => {
                         {!artist || artist.length === 0 ? (
                             <tr>
                                 <td colSpan="7" className="px-6 py-4 text-center text-gray-500">
-                                    No hay catálogos registrados
+                                    No hay artistas registrados
                                 </td>
                             </tr>
                         ) : (

@@ -4,11 +4,14 @@ import { artistService } from '../services';
 
 const ArtistForm = ({ item, artistTypes, onSuccess, onCancel }) => {
     const [formData, setFormData] = useState({
-        id_artist_type: item?.id_artis_type || '',
+        id_artist_type: item?.id_artist_type || '',
         name: item?.name || '',
-        description: item?.description || '',}
+        lastname: item?.lastname || '',
+        gender: item?.gender || '',
+        date_birth: item?.date_birth || '',
+        active: item?.active ?? true,
+    });
 
-    );
     const [error, setError] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const { validateToken } = useAuth();
@@ -24,39 +27,35 @@ const ArtistForm = ({ item, artistTypes, onSuccess, onCancel }) => {
 
     const handleSubmit = async () => {
         if (isSubmitting) return;
+        if (!validateToken()) return;
 
-        if (!validateToken()) {
-            return;
-        }
-
+        // Validaciones básicas
         if (!formData.id_artist_type.trim()) {
             setError('El tipo de artista es requerido');
             return;
         }
 
-        if (!formData.name.trim()) {
-            setError('El nombre es requerido');
+        if (!formData.name.trim() || !formData.lastname.trim()) {
+            setError('Nombre y apellido son requeridos');
             return;
         }
 
-        const namePattern = /^[0-9A-Za-zÁÉÍÓÚÜÑáéíóúüñ' -]+$/;
-        if (!namePattern.test(formData.name)) {
-            setError('El nombre solo puede contener letras, números, espacios, apostrofes y guiones');
+        if (!formData.gender) {
+            setError('El género es requerido');
             return;
         }
 
-        if (!formData.description.trim()) {
-            setError('La descripción es requerida');
+        if (!formData.date_birth) {
+            setError('La fecha de nacimiento es requerida');
             return;
         }
-
 
         setIsSubmitting(true);
 
         try {
             setError('');
             let savedItem;
-            
+
             if (item) {
                 savedItem = await artistService.update(item.id, formData);
                 if (!savedItem) {
@@ -66,9 +65,9 @@ const ArtistForm = ({ item, artistTypes, onSuccess, onCancel }) => {
             } else {
                 savedItem = await artistService.create(formData);
                 if (!savedItem) {
-                    savedItem = { 
+                    savedItem = {
                         id: Date.now().toString(),
-                        ...formData 
+                        ...formData
                     };
                 }
                 onSuccess(savedItem, false);
@@ -82,12 +81,8 @@ const ArtistForm = ({ item, artistTypes, onSuccess, onCancel }) => {
     };
 
     const handleKeyPress = (e) => {
-        if (e.key === 'Enter' && !isSubmitting) {
-            handleSubmit();
-        }
-        if (e.key === 'Escape') {
-            onCancel();
-        }
+        if (e.key === 'Enter' && !isSubmitting) handleSubmit();
+        if (e.key === 'Escape') onCancel();
     };
 
     const activeArtistTypes = artistTypes.filter(type => type.active);
@@ -97,7 +92,7 @@ const ArtistForm = ({ item, artistTypes, onSuccess, onCancel }) => {
             <div className="bg-white rounded-lg shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
                 <div className="p-6">
                     <h2 className="text-xl font-bold text-gray-800 mb-4">
-                        {item ? 'Editar Catálogo' : 'Nuevo Catálogo'}
+                        {item ? 'Editar Artista' : 'Nuevo Artista'}
                     </h2>
 
                     {error && (
@@ -119,8 +114,7 @@ const ArtistForm = ({ item, artistTypes, onSuccess, onCancel }) => {
                                 name="id_artist_type"
                                 value={formData.id_artist_type}
                                 onChange={handleChange}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
-                                required
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md"
                             >
                                 <option value="">Seleccionar tipo...</option>
                                 {activeArtistTypes.map((type) => (
@@ -142,68 +136,60 @@ const ArtistForm = ({ item, artistTypes, onSuccess, onCancel }) => {
                                 value={formData.name}
                                 onChange={handleChange}
                                 onKeyDown={handleKeyPress}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
-                                placeholder="Ej: Chocolates Premium"
+                                className="w-full px-3 py-2 border rounded-md"
+                                placeholder="Nombre del artista"
                                 maxLength="100"
-                                autoFocus={!item}
                             />
                         </div>
 
                         <div>
-                            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-                                Descripción *
+                            <label htmlFor="lastname" className="block text-sm font-medium text-gray-700 mb-1">
+                                Apellido *
                             </label>
-                            <textarea
-                                id="description"
-                                name="description"
-                                value={formData.description}
+                            <input
+                                type="text"
+                                id="lastname"
+                                name="lastname"
+                                value={formData.lastname}
                                 onChange={handleChange}
-                                rows="3"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
-                                placeholder="Descripción detallada del catálogo..."
-                                maxLength="500"
+                                onKeyDown={handleKeyPress}
+                                className="w-full px-3 py-2 border rounded-md"
+                                placeholder="Apellido del artista"
+                                maxLength="100"
                             />
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label htmlFor="cost" className="block text-sm font-medium text-gray-700 mb-1">
-                                    Costo (HNL) *
-                                </label>
-                                <input
-                                    type="number"
-                                    id="cost"
-                                    name="cost"
-                                    value={formData.cost}
-                                    onChange={handleChange}
-                                    onKeyDown={handleKeyPress}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
-                                    placeholder="0.00"
-                                    min="0.01"
-                                    max="999999.99"
-                                    step="0.01"
-                                />
-                            </div>
-
-                            <div>
-                                <label htmlFor="discount" className="block text-sm font-medium text-gray-700 mb-1">
-                                    Descuento (%)
-                                </label>
-                                <input
-                                    type="number"
-                                    id="discount"
-                                    name="discount"
-                                    value={formData.discount}
-                                    onChange={handleChange}
-                                    onKeyDown={handleKeyPress}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
-                                    placeholder="0"
-                                    min="0"
-                                    max="100"
-                                />
-                            </div>
+                        <div>
+                            <label htmlFor="gender" className="block text-sm font-medium text-gray-700 mb-1">
+                                Género *
+                            </label>
+                            <select
+                                id="gender"
+                                name="gender"
+                                value={formData.gender}
+                                onChange={handleChange}
+                                className="w-full px-3 py-2 border rounded-md"
+                            >
+                                <option value="">Seleccionar género</option>
+                                <option value="Male">Masculino</option>
+                                <option value="Female">Femenino</option>
+                                <option value="Other">Otro</option>
+                            </select>
                         </div>
 
+                        <div>
+                            <label htmlFor="date_birth" className="block text-sm font-medium text-gray-700 mb-1">
+                                Fecha de nacimiento *
+                            </label>
+                            <input
+                                type="date"
+                                id="date_birth"
+                                name="date_birth"
+                                value={formData.date_birth}
+                                onChange={handleChange}
+                                className="w-full px-3 py-2 border rounded-md"
+                            />
+                        </div>
 
                         <div className="flex items-center">
                             <input
@@ -212,7 +198,7 @@ const ArtistForm = ({ item, artistTypes, onSuccess, onCancel }) => {
                                 name="active"
                                 checked={formData.active}
                                 onChange={handleChange}
-                                className="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300 rounded"
+                                className="h-4 w-4 text-pink-600 border-gray-300 rounded"
                             />
                             <label htmlFor="active" className="ml-2 block text-sm text-gray-700">
                                 Activo
@@ -224,7 +210,7 @@ const ArtistForm = ({ item, artistTypes, onSuccess, onCancel }) => {
                         <button
                             type="button"
                             onClick={onCancel}
-                            className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+                            className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md"
                             disabled={isSubmitting}
                         >
                             Cancelar
@@ -233,7 +219,7 @@ const ArtistForm = ({ item, artistTypes, onSuccess, onCancel }) => {
                             type="button"
                             onClick={handleSubmit}
                             disabled={isSubmitting}
-                            className="px-4 py-2 text-sm font-medium text-white bg-pink-500 hover:bg-pink-600 rounded-md disabled:opacity-50 transition-colors"
+                            className="px-4 py-2 text-sm font-medium text-white bg-pink-500 hover:bg-pink-600 rounded-md"
                         >
                             {isSubmitting ? 'Guardando...' : 'Guardar'}
                         </button>

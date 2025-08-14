@@ -76,7 +76,7 @@ const ArtistTypesList = () => {
             : 'Este tipo será eliminado permanentemente del sistema.';
 
         const confirmed = window.confirm(
-            `¿Estás seguro de ${action} el tipo de catálogo "${item.description}"?\n\n${consequence}\n\n¿Deseas continuar?`
+            `¿Estás seguro de ${action} el tipo de artista "${item.description}"?\n\n${consequence}\n\n¿Deseas continuar?`
         );
 
         if (confirmed) {
@@ -174,19 +174,20 @@ const ArtistTypesList = () => {
                         {artistTypes.length === 0 ? (
                             <tr>
                                 <td colSpan="5" className="px-6 py-4 text-center text-gray-500">
-                                    No hay tipos de catálogo registrados
+                                    No hay tipos de artista registrados
                                 </td>
                             </tr>
                         ) : (
-                            artistTypes.map((item) => (
-                                <tr 
-                                    key={item.id} 
-                                    className={`hover:bg-gray-50 transition-colors ${
-                                        recentlyUpdated === item.id 
-                                            ? 'bg-green-50 border-l-4 border-green-400' 
-                                            : ''
-                                    }`}
-                                >
+                            artistTypes.map((item, index) => (
+    <tr 
+        key={item.id || index}
+        className={`hover:bg-gray-50 transition-colors ${
+            recentlyUpdated === item.id 
+                ? 'bg-green-50 border-l-4 border-green-400' 
+                : ''
+        }`}
+    >
+
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                         {item.id}
                                     </td>
