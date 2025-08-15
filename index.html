@@ -2,13 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <!-- Usá ruta relativa para que funcione en dev y en build -->
+    <link rel="icon" type="image/svg+xml" href="./vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./dist/output.css" /> <!-- Mueve esta línea aquí -->
-    <title>Discografia</title>
+    <title>Discografía</title>
   </head>
   <body>
     <div id="root"></div>
+    <!-- ENTRY de fuente: ¡NO pongas /assets aquí! -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
