@@ -2,7 +2,7 @@
   "name": "discografia-ui",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://AlexaM115.github.io/discografia-ui",
+  "homepage": "https://alexam115.github.io/discografia-ui",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
