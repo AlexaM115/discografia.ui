@@ -182,7 +182,7 @@ const ArtistList = () => {
                                 </td>
                             </tr>
                         ) : (
-                            artist.map((item) => (
+                            artists.map((item) => (
                                 <tr 
                                     key={item.id} 
                                     className={`hover:bg-gray-50 transition-colors ${
