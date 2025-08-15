@@ -2,6 +2,28 @@ import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { artistService } from '../services';
 
+
+const loadData = async () => {
+    try {
+        setLoading(true);
+        setError('');
+
+        const artistsData = await artistService.getAll();
+        console.log("🎨 Artistas recibidos del backend:", artistsData);
+
+        setArtists(artistsData.artists); // ⚠️ O simplemente artistsData si no hay .artists
+
+        const artistTypesData = await artistTypeService.getAll();
+        setArtistTypes(artistTypesData);
+    } catch (error) {
+        console.error('Error al cargar artistas o tipos de artistas:', error);
+        setError(error.message || 'Error al cargar los artistas');
+    } finally {
+        setLoading(false);
+    }
+};
+
+
 const ArtistForm = ({ item, artistTypes, onSuccess, onCancel }) => {
     const [formData, setFormData] = useState({
         id_artist_type: item?.id_artist_type || '',
