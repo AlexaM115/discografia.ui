@@ -2,6 +2,7 @@
   "name": "discografia-ui",
   "private": true,
   "version": "0.0.0",
+  "type": "module",
   "homepage": "https://AlexaM115.github.io/discografia-ui",
   "scripts": {
     "dev": "vite",
