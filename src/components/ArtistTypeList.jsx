@@ -1,22 +1,54 @@
 import { useState, useEffect } from 'react';
-import { artistTypeService } from '../services';
+import { createPortal } from 'react-dom';
+// Asegúrate de que estos servicios están definidos y devuelven los datos esperados
+import { artistTypeService, artistService } from '../services'; 
 import { useAuth } from '../context/AuthContext';
 import Layout from './Layout';
 import ArtistTypeForm from './ArtistTypeForm';
 
+// Componente simulado de modal de confirmación
+const ConfirmationModal = ({ isOpen, title, message, onConfirm, onCancel }) => {
+    if (!isOpen) return null;
+
+    return createPortal(
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-lg shadow-xl max-w-sm w-full p-6">
+                <h3 className="text-lg font-bold mb-2">{title}</h3>
+                <p className="text-sm text-gray-600 mb-4">{message}</p>
+                <div className="flex justify-end space-x-3">
+                    <button onClick={onCancel} className="px-4 py-2 bg-gray-200 rounded">Cancelar</button>
+                    <button onClick={onConfirm} className="px-4 py-2 bg-red-500 text-white rounded">Confirmar</button>
+                </div>
+            </div>
+        </div>,
+        document.body
+    );
+};
+
 const ArtistTypesList = () => {
     const [artistTypes, setArtistTypes] = useState([]);
+    const [artists, setArtists] = useState([]); // Estado para guardar la lista completa de artistas
+    const [artistCounts, setArtistCounts] = useState({}); // Estado para el conteo de artistas por tipo
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [showForm, setShowForm] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
-    const [recentlyUpdated, setRecentlyUpdated] = useState(null); // Para highlight temporal
-    const [successMessage, setSuccessMessage] = useState(''); // Para mensajes de éxito
+    const [recentlyUpdated, setRecentlyUpdated] = useState(null);
+    const [successMessage, setSuccessMessage] = useState('');
+    const [showModal, setShowModal] = useState(false); // Estado para el modal de confirmación
+    const [itemToDelete, setItemToDelete] = useState(null); // Item a desactivar o eliminar
     const { validateToken } = useAuth();
 
     useEffect(() => {
-        loadArtistTypes();
+        loadData();
     }, []);
+
+    useEffect(() => {
+        // Recalcular los conteos cada vez que los tipos de artista o los artistas cambian
+        if (artistTypes.length > 0 && artists.length > 0) {
+            calculateArtistCounts();
+        }
+    }, [artistTypes, artists]);
 
     useEffect(() => {
         if (recentlyUpdated) {
@@ -36,22 +68,55 @@ const ArtistTypesList = () => {
         }
     }, [successMessage]);
 
-    const loadArtistTypes = async () => {
+    const loadData = async () => {
         if (!validateToken()) {
+            setLoading(false);
             return;
         }
 
         try {
             setLoading(true);
             setError('');
-            const data = await artistTypeService.getAll();
-            setArtistTypes(data);
+            // Se cargan ambos datasets para hacer el conteo
+            const artistTypesData = await artistTypeService.getAll();
+            const artistsData = await artistService.getAll();
+            
+            console.log("Datos de Tipos de Artista cargados:", artistTypesData);
+            console.log("Datos de Artistas cargados:", artistsData);
+            
+            if (Array.isArray(artistTypesData)) {
+                setArtistTypes(artistTypesData);
+            } else {
+                console.error("artistTypeService.getAll() no devolvió un array. Se esperaba un array de tipos de artista.");
+                setArtistTypes([]);
+            }
+
+            if (Array.isArray(artistsData)) {
+                setArtists(artistsData);
+            } else {
+                console.error("artistService.getAll() no devolvió un array. Se esperaba un array de artistas.");
+                setArtists([]);
+            }
         } catch (error) {
-            console.error('Error al cargar tipos de artista:', error);
-            setError(error.message || 'Error al cargar los tipos de artista');
+            console.error('Error al cargar datos:', error);
+            setError(error.message || 'Error al cargar los datos');
         } finally {
             setLoading(false);
         }
+    };
+    
+    // Función para calcular el conteo de artistas por tipo
+    const calculateArtistCounts = () => {
+        const counts = artists.reduce((acc, artist) => {
+            const artistTypeId = artist.id_artist_type;
+            if (artistTypeId) {
+                acc[artistTypeId] = (acc[artistTypeId] || 0) + 1;
+            }
+            return acc;
+        }, {});
+        
+        console.log("Conteo de artistas calculado:", counts);
+        setArtistCounts(counts);
     };
 
     const handleCreate = () => {
@@ -64,39 +129,47 @@ const ArtistTypesList = () => {
         setShowForm(true);
     };
 
-    const handleDelete = async (item) => {
-        if (!validateToken()) {
+    // Nueva función para abrir el modal de confirmación
+    const handleDeleteClick = (item) => {
+        setItemToDelete(item);
+        setShowModal(true);
+    };
+
+    // Función para confirmar la eliminación o desactivación
+    const handleConfirmDelete = async () => {
+        setShowModal(false);
+        if (!validateToken() || !itemToDelete) {
             return;
         }
+        
+        const artistCount = artistCounts[itemToDelete.id] || 0;
+        const hasArtists = artistCount > 0;
+        const action = hasArtists ? 'desactivar' : 'eliminar';
 
-        const hasProducts = item.number_of_products > 0;
-        const action = hasProducts ? 'desactivar' : 'eliminar';
-        const consequence = hasProducts 
-            ? `Este tipo tiene ${item.number_of_products} producto(s) asociado(s). Se desactivará pero mantendrá la integridad de los datos.`
-            : 'Este tipo será eliminado permanentemente del sistema.';
-
-        const confirmed = window.confirm(
-            `¿Estás seguro de ${action} el tipo de artista "${item.description}"?\n\n${consequence}\n\n¿Deseas continuar?`
-        );
-
-        if (confirmed) {
-            try {
-                setError('');
-                await artistTypeService.deactivate(item.id);
-                await loadArtistTypes();
-                const message = hasProducts 
-                    ? 'Tipo de artista desactivado exitosamente'
-                    : 'Tipo de artista eliminado exitosamente';
-                setSuccessMessage(message);
-            } catch (error) {
-                console.error('Error al procesar:', error);
-                setError(error.message || `Error al ${action} el tipo de artista`);
-            }
+        try {
+            setError('');
+            // TODO: La función deactivate debe manejar la lógica de desactivar vs eliminar
+            await artistTypeService.deactivate(itemToDelete.id);
+            await loadData();
+            const message = hasArtists
+                ? 'Tipo de artista desactivado exitosamente'
+                : 'Tipo de artista eliminado exitosamente';
+            setSuccessMessage(message);
+        } catch (error) {
+            console.error('Error al procesar:', error);
+            setError(error.message || `Error al ${action} el tipo de artista`);
+        } finally {
+            setItemToDelete(null);
         }
+    };
+    
+    const handleCancelDelete = () => {
+        setShowModal(false);
+        setItemToDelete(null);
     };
 
     const handleFormSuccess = async (savedItem, isEdit = false) => {
-        await loadArtistTypes();
+        await loadData();
         setRecentlyUpdated(savedItem.id);
 
         const message = isEdit ? 'Tipo de artista actualizado exitosamente' : 'Tipo de artista creado exitosamente';
@@ -118,11 +191,24 @@ const ArtistTypesList = () => {
             </div>
         );
     }
+    
+    // Mensajes para el modal de confirmación
+    const modalTitle = itemToDelete ? (
+        (artistCounts[itemToDelete.id] || 0) > 0 ? "Desactivar Tipo de Artista" : "Eliminar Tipo de Artista"
+    ) : "";
+
+    const modalMessage = itemToDelete ? (
+        (artistCounts[itemToDelete.id] || 0) > 0
+            ? `El tipo "${itemToDelete.description}" tiene ${artistCounts[itemToDelete.id]} artista(s) asociado(s). Se desactivará pero se mantendrá en el sistema para conservar la integridad de los datos.`
+            : `Estás a punto de eliminar permanentemente el tipo de artista "${itemToDelete.description}". Esta acción no se puede deshacer.`
+    ) : "";
+    
+    console.log("Estado final para renderizar:", { artistTypes, artistCounts });
 
     return (
         <Layout>
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold text-gray-800">Tipos de Artista</h1>
+                <h1 className="text-3xl font-bold text-white">Tipos de Artista</h1>
                 <button
                     onClick={handleCreate}
                     className="bg-pink-500 hover:bg-pink-600 text-white font-medium py-2 px-4 rounded-md transition-colors"
@@ -160,7 +246,7 @@ const ArtistTypesList = () => {
                                 Descripción
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Productos
+                                Cantidad de Artistas
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Estado
@@ -195,19 +281,19 @@ const ArtistTypesList = () => {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         <span className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full ${
-                                            (item.number_of_products || 0) > 0 
-                                                ? 'bg-blue-100 text-blue-800' 
-                                                : 'bg-gray-100 text-gray-800'
-                                        }`}>
-                                            {item.number_of_products || 0} productos
+                                                (artistCounts[item.id] || 0) > 0 
+                                                    ? 'bg-blue-100 text-blue-800' 
+                                                    : 'bg-gray-100 text-gray-800'
+                                            }`}>
+                                            {artistCounts[item.id] || 0} artistas
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                                            item.active 
-                                                ? 'bg-green-100 text-green-800' 
-                                                : 'bg-red-100 text-red-800'
-                                        }`}>
+                                                item.active 
+                                                    ? 'bg-green-100 text-green-800' 
+                                                    : 'bg-red-100 text-red-800'
+                                            }`}>
                                             {item.active ? 'Activo' : 'Inactivo'}
                                         </span>
                                     </td>
@@ -220,14 +306,14 @@ const ArtistTypesList = () => {
                                         </button>
                                         {item.active && (
                                             <button
-                                                onClick={() => handleDelete(item)}
+                                                onClick={() => handleDeleteClick(item)}
                                                 className={`${
-                                                    (item.number_of_products || 0) > 0
+                                                    (artistCounts[item.id] || 0) > 0
                                                         ? 'text-orange-600 hover:text-orange-900'
                                                         : 'text-red-600 hover:text-red-900'
                                                 }`}
                                             >
-                                                {(item.number_of_products || 0) > 0 ? 'Desactivar' : 'Eliminar'}
+                                                {(artistCounts[item.id] || 0) > 0 ? 'Desactivar' : 'Eliminar'}
                                             </button>
                                         )}
                                     </td>
@@ -245,6 +331,14 @@ const ArtistTypesList = () => {
                     onCancel={handleFormCancel}
                 />
             )}
+
+            <ConfirmationModal
+                isOpen={showModal}
+                title={modalTitle}
+                message={modalMessage}
+                onConfirm={handleConfirmDelete}
+                onCancel={handleCancelDelete}
+            />
         </Layout>
     );
 };

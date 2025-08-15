@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"
 import { useAuth } from "../context/AuthContext";
-// import { isValidEmail, validatePassword } from "../utils/validators";
 
 const LoginScreen = () => {
 
@@ -60,15 +59,15 @@ const LoginScreen = () => {
     };
 
     return(
-        <div className="min-h-screen bg-pink-50 flex items-center justify-center p-4">
-            <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 flex items-center justify-center p-4">
+            <div className="bg-white/90 backdrop-blur-sm p-8 rounded-2xl shadow-lg w-full max-w-md border border-purple-100">
                 {/* Header */}
                 <div className="text-center mb-8">
-                <div className="w-16 h-16 bg-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-2xl text-white">🍭</span>
+                <div className="w-16 h-16 rounded-2xl mx-auto mb-4 bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center shadow-md">
+                    <span className="text-2xl text-white">📀</span>
                 </div>
-                <h1 className="text-2xl font-bold text-gray-800">Dulcería Mágica</h1>
-                <p className="text-gray-600">Inicia sesión</p>
+                <h1 className="text-2xl font-extrabold text-purple-900 tracking-tight">Discografía</h1>
+                <p className="text-purple-600">Inicia sesión</p>
                 </div>
 
                 {/* Mensaje de error */}
@@ -84,14 +83,14 @@ const LoginScreen = () => {
                 {/* Formulario */}
                 <form className="space-y-4" noValidate>
                 <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="email" className="block text-sm font-medium text-purple-800 mb-1">
                     Email
                     </label>
                     <input
                     type="email"
                     id="email"
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                    className="w-full px-3 py-2 border border-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400"
                     placeholder="tu@email.com"
                     value={email}
                     onChange={ (e) => {
@@ -107,14 +106,14 @@ const LoginScreen = () => {
                 </div>
 
                 <div>
-                    <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="password" className="block text-sm font-medium text-purple-800 mb-1">
                     Contraseña
                     </label>
                     <input
                     type="password"
                     id="password"
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                    className="w-full px-3 py-2 border border-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400"
                     placeholder="••••••••"
                     value={password}
                     onChange={ (e) => {
@@ -132,7 +131,7 @@ const LoginScreen = () => {
                 <button
                     type="button"
                     onClick={handleLogin}
-                    className="w-full bg-pink-500 text-white py-2 px-4 rounded-md hover:bg-pink-600 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-2 px-4 rounded-md hover:from-purple-700 hover:to-indigo-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                     disabled={isSubmitting}
                 >
                     {isSubmitting ? "Iniciando sesión..." : "Iniciar Sesión"}
@@ -140,9 +139,9 @@ const LoginScreen = () => {
                 </form>
 
                 {/* Link de registro */}
-                <p className="text-center text-sm text-gray-600 mt-4">
+                <p className="text-center text-sm text-purple-700 mt-4">
                 ¿No tienes cuenta?{" "}
-                <Link to="/signup" className="text-pink-500 hover:text-pink-600">
+                <Link to="/signup" className="text-purple-600 hover:text-purple-700 underline">
                     Regístrate
                 </Link>
                 </p>
