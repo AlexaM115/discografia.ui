@@ -53,6 +53,10 @@ const ArtistList = () => {
                 console.warn('Error al cargar tipos de artista:', typeError);
                 setArtistTypes([]);
             }
+            
+            // Log para depuración - Revisa esto en la consola del navegador
+            console.log("Datos de artistas cargados:", artistsData);
+            console.log("Datos de tipos de artista cargados:", artistTypes);
 
         } catch (error) {
             console.error('Error al cargar artistas:', error);
@@ -77,9 +81,8 @@ const ArtistList = () => {
             return;
         }
 
-        const confirmed = window.confirm(
-            `¿Estás seguro de eliminar el artista "${item.name}"?\n\nEsta acción no se puede deshacer.`
-        );
+        // Se simula la confirmación para evitar el uso de window.confirm
+        const confirmed = true; 
 
         if (confirmed) {
             try {
@@ -114,7 +117,10 @@ const ArtistList = () => {
     };
 
     const getArtistTypeName = (artist) => {
-        return artist.artist_type_description || 'Tipo no encontrado';
+        // Busca el tipo de artista que coincida con el id del artista
+        const type = artistTypes.find(t => (t._id || t.id) === artist.id_artist_type);
+        // Si no se encuentra, devuelve "Tipo no encontrado"
+        return type ? type.description : 'Tipo no encontrado';
     };
 
     if (loading) {
@@ -128,7 +134,7 @@ const ArtistList = () => {
     return (
         <Layout>
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold text-gray-800">Artistas</h1>
+                <h1 className="text-3xl font-bold text-white">Artistas</h1>
                 <button
                     onClick={handleCreate}
                     className="bg-pink-500 hover:bg-pink-600 text-white font-medium py-2 px-4 rounded-md transition-colors"
@@ -171,7 +177,15 @@ const ArtistList = () => {
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Fecha de nacimiento
                             </th>
-                            
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Tipo de artista
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Estado
+                            </th>
+                            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Acciones
+                            </th>
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
@@ -184,16 +198,24 @@ const ArtistList = () => {
                         ) : (
                             artists.map((item) => (
                                 <tr 
-                                    key={item.id} 
+                                    key={item._id || item.id} 
                                     className={`hover:bg-gray-50 transition-colors ${
-                                        recentlyUpdated === item.id 
+                                        recentlyUpdated === (item._id || item.id) 
                                             ? 'bg-green-50 border-l-4 border-green-400' 
                                             : ''
                                     }`}
                                 >
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="text-sm font-medium text-gray-900">{item.name}</div>
-                                        <div className="text-sm text-gray-500 truncate max-w-xs">{item.description}</div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {item.lastname}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {item.gender}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {new Date(item.date_birth).toLocaleDateString()}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         <span className="inline-flex px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
@@ -202,10 +224,10 @@ const ArtistList = () => {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                                            item.active 
-                                                ? 'bg-green-100 text-green-800' 
-                                                : 'bg-red-100 text-red-800'
-                                        }`}>
+                                                item.active 
+                                                    ? 'bg-green-100 text-green-800' 
+                                                    : 'bg-red-100 text-red-800'
+                                            }`}>
                                             {item.active ? 'Activo' : 'Inactivo'}
                                         </span>
                                     </td>

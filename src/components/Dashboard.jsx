@@ -11,7 +11,7 @@ const Dashboard = () => {
                     Selecciona una opción del menú para comenzar
                 </h2>
                 <p className="text-gray-500">
-                    Usa el menú de arriba para navegar entre los módulos de Tipos y Productos
+                    Usa el menú de arriba para navegar entre los módulos de Tipos y Artistas
                 </p>
             </div>
         </Layout>
