@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-// Asegúrate de que estos servicios están definidos y devuelven los datos esperados
 import { artistTypeService, artistService } from '../services'; 
 import { useAuth } from '../context/AuthContext';
 import Layout from './Layout';
 import ArtistTypeForm from './ArtistTypeForm';
 
-// Componente simulado de modal de confirmación
 const ConfirmationModal = ({ isOpen, title, message, onConfirm, onCancel }) => {
     if (!isOpen) return null;
 
@@ -44,7 +42,6 @@ const ArtistTypesList = () => {
     }, []);
 
     useEffect(() => {
-        // Recalcular los conteos cada vez que los tipos de artista o los artistas cambian
         if (artistTypes.length > 0 && artists.length > 0) {
             calculateArtistCounts();
         }
@@ -148,7 +145,6 @@ const ArtistTypesList = () => {
 
         try {
             setError('');
-            // TODO: La función deactivate debe manejar la lógica de desactivar vs eliminar
             await artistTypeService.deactivate(itemToDelete.id);
             await loadData();
             const message = hasArtists
@@ -192,7 +188,6 @@ const ArtistTypesList = () => {
         );
     }
     
-    // Mensajes para el modal de confirmación
     const modalTitle = itemToDelete ? (
         (artistCounts[itemToDelete.id] || 0) > 0 ? "Desactivar Tipo de Artista" : "Eliminar Tipo de Artista"
     ) : "";
