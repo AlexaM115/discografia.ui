@@ -11,7 +11,7 @@ const loadData = async () => {
         const artistsData = await artistService.getAll();
         console.log("🎨 Artistas recibidos del backend:", artistsData);
 
-        setArtists(artistsData.artists); // ⚠️ O simplemente artistsData si no hay .artists
+        setArtists(artistsData.artists); // 
 
         const artistTypesData = await artistTypeService.getAll();
         setArtistTypes(artistTypesData);
@@ -22,6 +22,8 @@ const loadData = async () => {
         setLoading(false);
     }
 };
+
+
 
 
 const ArtistForm = ({ item, artistTypes, onSuccess, onCancel }) => {
